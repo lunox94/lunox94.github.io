@@ -28,6 +28,7 @@ jspm_packages/
 dist/
 build/
 out/
+_site/
 
 # IDEs and editors
 .vscode/
@@ -37,3 +38,6 @@ out/
 # Environment variables
 .env
 .env.test
+
+# Cache
+.cache
