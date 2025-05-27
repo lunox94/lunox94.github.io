@@ -1,3 +1,5 @@
+@import "tailwindcss";
+
 /* Defaults */
 :root {
 	--font-family: "Titillium Web", -apple-system, system-ui, sans-serif;

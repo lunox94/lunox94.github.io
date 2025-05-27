@@ -6,8 +6,34 @@ import { eleventyImageTransformPlugin } from "@11ty/eleventy-img";
 
 import pluginFilters from "./_config/filters.js";
 
+import postcss from "postcss";
+import tailwindcss from "@tailwindcss/postcss";
+import cssnano from "cssnano";
+import fs from "node:fs/promises";
+import path from "node:path";
+
 /** @param {import("@11ty/eleventy").UserConfig} eleventyConfig */
 export default async function (eleventyConfig) {
+    eleventyConfig.on("eleventy.before", async () => {
+        const cssDir = "public/css";
+        const siteDir = "_site";
+        const inputFile = path.join(cssDir, "index.css");
+        const outputFile = path.join(siteDir, "css", "index.css");
+
+        try {
+            const css = await fs.readFile(inputFile);
+            const result = await postcss([
+                tailwindcss,
+                cssnano({ preset: "default" }),
+            ]).process(css, { from: inputFile, to: outputFile });
+
+            await fs.mkdir(path.dirname(outputFile), { recursive: true });
+            await fs.writeFile(outputFile, result.css);
+        } catch (error) {
+            console.error("Error processing CSS with PostCSS:", error);
+        }
+    });
+
     // Drafts, see also _data/eleventyDataSchema.js
     eleventyConfig.addPreprocessor("drafts", "*", (data, content) => {
         if (data.draft && process.env.ELEVENTY_RUN_MODE === "build") {
@@ -19,7 +45,9 @@ export default async function (eleventyConfig) {
     // For example, `./public/css/` ends up in `_site/css/`
     eleventyConfig
         .addPassthroughCopy({
-            "./public/": "/"
+            "./public/css/message-box.css": "css/message-box.css",
+            "./public/css/prism-diff.css": "css/prism-diff.css",
+            "./public/img/": "img/"
         })
         .addPassthroughCopy("./content/feed/pretty-atom-feed.xsl");
 
