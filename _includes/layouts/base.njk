@@ -40,31 +40,37 @@
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 		<link href="https://fonts.googleapis.com/css2?family=Titillium+Web:ital,wght@0,200;0,300;0,400;0,600;0,700;0,900;1,200;1,300;1,400;1,600;1,700&display=swap" rel="stylesheet">
 	</head>
-	<body>
+	<body class="w-full">
 		<a href="#skip" class="visually-hidden">Skip to main content</a>
 
-		<header>
-			<a href="/" class="home-link">{{ metadata.title }}</a>
+		<header class="border-b border-blue-200 dark:border-gray-700 py-4 px-4 sm:px-6 lg:px-8">
+			<div class="container mx-auto flex justify-between items-center">
+				<a href="/" class="home-link text-lg font-bold text-gray-900 dark:text-[#c9d1d9] hover:text-blue-600 dark:hover:text-blue-500">{{ metadata.title }}</a>
 
-			{#- Read more about `eleventy-navigation` at https://www.11ty.dev/docs/plugins/navigation/ #}
-			<nav>
-				<h2 class="visually-hidden">Top level navigation menu</h2>
-				<ul class="nav">
-				{%- for entry in collections.all | eleventyNavigation %}
-					<li class="nav-item"><a href="{{ entry.url }}"{% if entry.url == page.url %} aria-current="page"{% endif %}>{{ entry.title }}</a></li>
-				{%- endfor %}
-				</ul>
-			</nav>
+				{#- Read more about `eleventy-navigation` at https://www.11ty.dev/docs/plugins/navigation/ #}
+				<nav>
+					<h2 class="visually-hidden">Top level navigation menu</h2>
+					<ul class="nav flex space-x-4">
+					{%- for entry in collections.all | eleventyNavigation %}
+						<li class="nav-item">
+							<a href="{{ entry.url }}" class="text-base text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-500 hover:underline{% if entry.url == page.url %} bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded-md{% endif %}"{% if entry.url == page.url %} aria-current="page"{% endif %}>
+								{{ entry.title }}
+							</a>
+						</li>
+					{%- endfor %}
+					</ul>
+				</nav>
+			</div>
 		</header>
 
-		<main id="skip">
+		<main id="skip" class="py-8 px-4 sm:px-6 lg:px-8 container mx-auto">
 			<heading-anchors>
 				{{ content | safe }}
 			</heading-anchors>
 		</main>
 
-		<footer>
-			<p><em>Built with <a href="https://www.11ty.dev/">{{ eleventy.generator }}</a></em></p>
+		<footer class="py-8 px-4 sm:px-6 lg:px-8 border-t border-gray-200 dark:border-gray-700 mt-12">
+			<p class="text-center text-sm text-gray-600 dark:text-gray-400"><em>Built with <a href="https://www.11ty.dev/" class="text-blue-600 dark:text-blue-500 hover:underline">{{ eleventy.generator }}</a></em></p>
 		</footer>
 
 		<!-- This page `{{ page.url | htmlBaseUrl }}` was built on {% currentBuildDate %} -->
